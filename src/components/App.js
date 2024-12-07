@@ -140,10 +140,83 @@ const states = [{
 
 function App() 
 {
+	const [selectedStateIndex, setSelectedStateIndex] = useState(0);
+        const [selectedCityIndex, setSelectedCityIndex] = useState(0);
+        const [selectedLandmarkIndex, setSelectedLandmarkIndex] = useState(0);
+
+	const selectedState = states[selectedStateIndex];
+        const selectedCity = selectedState.city[selectedCityIndex];
+        const selectedLandmark = selectedCity.landmarks[selectedLandmarkIndex];
+	
+	const handleStateChange = (e) => {
+        const newStateIndex = parseInt(e.target.value, 10);
+        setSelectedStateIndex(newStateIndex);
+        setSelectedCityIndex(0); // Reset City and Landmark when State changes
+        setSelectedLandmarkIndex(0);
+  };
+
+	  const handleCityChange = (e) => {
+    const newCityIndex = parseInt(e.target.value, 10);
+    setSelectedCityIndex(newCityIndex);
+    setSelectedLandmarkIndex(0); // Reset Landmark when City changes
+  };
+
+	 const handleLandmarkChange = (e) => {
+    setSelectedLandmarkIndex(parseInt(e.target.value, 10));
+  };
+
+	
 	// Do not alter/remove main div
 	return (
 	<div id="main">
-		
+      <label htmlFor="state">State:</label>
+      <select id="state" value={selectedStateIndex} onChange={handleStateChange}>
+        {states.map((state, index) => (
+          <option key={index} value={index}>
+            {state.name}
+          </option>
+        ))}
+      </select>
+<label htmlFor="city">City:</label>
+      <select id="city" value={selectedCityIndex} onChange={handleCityChange}>
+        {selectedState.city.map((city, index) => (
+          <option key={index} value={index}>
+            {city.name}
+          </option>
+        ))}
+      </select>
+
+	         <label htmlFor="landmark">Landmark:</label>
+      <select
+        id="landmark"
+        value={selectedLandmarkIndex}
+        onChange={handleLandmarkChange}
+      >
+        {selectedCity.landmarks.map((landmark, index) => (
+          <option key={index} value={index}>
+            {landmark.name}
+          </option>
+        ))}
+      </select>
+
+	       {/* Display selected State details */}
+      <div id="state-name">
+        <h3>State: {selectedState.name}</h3>
+        <p id="state-description">{selectedState.description}</p>
+      </div>
+
+      {/* Display selected City details */}
+      <div id="city-name">
+        <h3>City: {selectedCity.name}</h3>
+        <p id="city-description">{selectedCity.description}</p>
+      </div>
+
+      {/* Display selected Landmark details */}
+      <div id="landmark-name">
+        <h3>Landmark: {selectedLandmark.name}</h3>
+        <p id="landmark-description">{selectedLandmark.description}</p>
+      </div>
+	      
 	</div>
 	);
 }
